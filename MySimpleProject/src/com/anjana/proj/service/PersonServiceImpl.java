@@ -1,51 +1,53 @@
 package com.anjana.proj.service;
 
-import java.util.Date;
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.anjana.proj.dao.PersonDAO;
 import com.anjana.proj.model.Person;
-import com.anjana.proj.repository.PersonRepository;
+import com.anjana.proj.model.RightRef;
+ 
 
-public class PersonServiceImpl implements PersonService{
-
-	PersonRepository personRepository;
-	@Override
-	public void addPerson(Person person) {
-		// TODO Auto-generated method stub
-		saveFullDataProc(person); 
-		log.info("Request saved!");
-	}
-
-	private void saveFullDataProc(Person person) {
-		// TODO Auto-generated method stub
-		dataProc.setDteCreate(new Date());
-		dataProc.setDteLastAction(dataProc.getDteCreate());
-		dataProc.setOperLast(dataProc.getOperCreator());
-		//Save DataProc in DB
-		personService.saveDataProc(dataProc);
-		dataProc.setReference(themisRequest.getHeader()+dataProc.getId());
-		logSecurity.debug("User ["+dataProc.getOperCreator().getLogin()+"] just created request with reference ["+dataProc.getReference()+"]");
-	}
-
-	@Override
-	public void addAddress(Address a) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Person getPerson(String id) {
-		// TODO Auto-generated method stub
-		return personRepository.findPerson(id, new PageRequest(firstResult / maxResults, maxResults)).getContent();
-	}
-
-	@Override
-	public List<Person> getPeople() {
-		// TODO Auto-generated method stub
-		return personRepository.findAllPersons(new PageRequest(firstResult / maxResults, maxResults)).getContent();
-	}
-
-	
+ 
+@Service
+public class PersonServiceImpl implements PersonService {
+     
+    private PersonDAO personDAO;
+ 
+    public void setPersonDAO(PersonDAO personDAO) {
+        this.personDAO = personDAO;
+    }
+ 
+    @Override
+    @Transactional
+    public void addPerson(Person p) {
+        this.personDAO.addPerson(p);
+    }
+ 
+    @Override
+    @Transactional
+    public void updatePerson(Person p) {
+        this.personDAO.updatePerson(p);
+    }
+ 
+    @Override
+    @Transactional
+    public List<Person> listPersons() {
+        return this.personDAO.listPersons();
+    }
+ 
+    @Override
+    @Transactional
+    public RightRef getPersonById(String id) {
+        return this.personDAO.getPersonById(id);
+    }
+ 
+    @Override
+    @Transactional
+    public void removePerson(int id) {
+        this.personDAO.removePerson(id);
+    }
+ 
 }

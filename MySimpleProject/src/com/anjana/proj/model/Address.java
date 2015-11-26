@@ -1,5 +1,19 @@
 package com.anjana.proj.model;
 
+import javax.persistence.PersistenceContext;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.PersistenceContextType;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
+
 @javax.persistence.Entity
 @Table(name = "ADDRESS")
 public class Address {
